@@ -11,9 +11,8 @@ app.use(express.json());
 dotenv.config();
 
 const PORT = process.env.PORT || 4001;
-const URI = process.env.MONGODB_URI; 
-console.log("uri",URI);
-
+const URI = process.env.MONGODB_URI;
+console.log("uri", URI);
 
 const connectDB = async () => {
   try {
