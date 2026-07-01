@@ -1,40 +1,34 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import cors from "cors";
-
 import bookRoute from "./route/books.route.js";
+import cors from "cors";
 import userRoute from "./route/user.route.js";
 
-dotenv.config();
-
 const app = express();
-
 app.use(cors());
 app.use(express.json());
+dotenv.config();
 
-const URI = process.env.MONGODB_URI;
+const PORT = process.env.PORT || 4001;
+const URI = process.env.MONGODB_URI; 
+console.log("uri",URI);
+
 
 const connectDB = async () => {
   try {
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(URI);
-      console.log("MongoDB connected successfully");
-    }
+    await mongoose.connect(URI);
+    console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
+    process.exit(1);
   }
 };
-
 connectDB();
-
-
-app.get("/", (req, res) => {
-  res.send("BookStore API is running...");
-});
 
 app.use("/book", bookRoute);
 app.use("/user", userRoute);
 
-
-export default app;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
