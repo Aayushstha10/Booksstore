@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-// mongoose.connect(
-//   "mongodb+srv://aayush:aayush123@cluster0.wsajyl8.mongodb.net/Bookstore",
-// );
+
 
 const bookschema = mongoose.Schema({
   name: String,
