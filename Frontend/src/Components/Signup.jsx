@@ -2,8 +2,9 @@ import React from "react";
 import { Link, Navigate } from "react-router-dom";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+
 import toast from "react-hot-toast";
+import API from "../../api";
 
 function Signup() {
   const {
@@ -18,8 +19,8 @@ function Signup() {
       email: data.email,
       password: data.password,
     };
-    await axios
-      .post("http://localhost:4001/user/signup", userInfo)
+    await API
+      .post("/user/signup", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {

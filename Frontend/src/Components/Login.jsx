@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import toast from "react-hot-toast";
+import API from "../../api";
 
 function Login() {
   const {
@@ -16,8 +16,8 @@ function Login() {
       email: data.email,
       password: data.password,
     };
-    await axios
-      .post("http://localhost:4001/user/login", userInfo)
+    await API
+      .post("/user/login", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {
