@@ -10,15 +10,31 @@ dotenv.config();
 
 const app = express();
 
+// Allowed frontend URLs
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://booksstore-h6rh.vercel.app", // Replace with your frontend URL
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // React/Vite frontend
+    origin: function (origin, callback) {
+      // Allow requests from Postman or server-side requests
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS policy: Origin not allowed"));
+    },
     credentials: true,
   }),
 );
 
 app.use(express.json());
 
+// Home Route
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -26,6 +42,19 @@ app.get("/", (req, res) => {
   });
 });
 
+// Routes
+app.use("/book", bookRoute);
+app.use("/user", userRoute);
+
+// 404 Route
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
+// MongoDB Connection
 const URI = process.env.MONGODB_URI;
 
 mongoose
@@ -37,18 +66,9 @@ mongoose
     console.error("❌ MongoDB Connection Error:", err);
   });
 
-app.use("/book", bookRoute);
-app.use("/user", userRoute);
-
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
-});
-
+// Start Server
 const PORT = process.env.PORT || 4001;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
