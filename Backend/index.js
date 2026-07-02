@@ -54,21 +54,13 @@ app.use((req, res) => {
   });
 });
 
-// MongoDB Connection
-const URI = process.env.MONGODB_URI;
-
 mongoose
-  .connect(URI)
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
+    console.log("Database:", mongoose.connection.db.databaseName);
+    console.log("Host:", mongoose.connection.host);
   })
   .catch((err) => {
-    console.error("❌ MongoDB Connection Error:", err);
+    console.error(err);
   });
-
-// Start Server
-const PORT = process.env.PORT || 4001;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});

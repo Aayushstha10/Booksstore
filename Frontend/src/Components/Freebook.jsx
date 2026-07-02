@@ -12,6 +12,7 @@ function Freebook() {
   useEffect(() => {
     const getBook = async () => {
       try {
+        console.log("API URL:", import.meta.env.VITE_API_URL);
         const res = await API.get("/book");
         setBook(res.data.filter((data) => data.category === "free"));
       } catch (error) {
