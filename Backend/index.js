@@ -10,16 +10,26 @@ dotenv.config();
 
 const app = express();
 
-// CORS
+// Allowed frontend URLs
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://booksstore-h6rh.vercel.app", // Replace with your frontend URL
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://booksstore-h6rh.vercel.app", // Frontend URL
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
+    origin: function (origin, callback) {
+      // Allow requests from Postman or server-side requests
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS policy: Origin not allowed"));
+    },
+    credentials: true,
+  }),
 );
 
 app.use(express.json());
@@ -44,7 +54,6 @@ app.use((req, res) => {
   });
 });
 
-// MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -53,7 +62,7 @@ mongoose
     console.log("Host:", mongoose.connection.host);
   })
   .catch((err) => {
-    console.error("MongoDB Connection Error:", err);
+    console.error(err);
   });
 
 export default app;

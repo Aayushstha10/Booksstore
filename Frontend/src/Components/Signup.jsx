@@ -19,8 +19,7 @@ function Signup() {
       email: data.email,
       password: data.password,
     };
-    await API
-      .post("/user/signup", userInfo)
+    await API.post("/user/signup", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {
