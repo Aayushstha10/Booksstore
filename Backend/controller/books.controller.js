@@ -2,15 +2,10 @@ import Book from "../model/books.model.js";
 
 export const getBook = async (req, res) => {
   try {
-    console.log("Collection:", Book.collection.name);
-
-    const books = await Book.find();
-
-    console.log("Books found:", books.length);
-
-    res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
+    const book = await Book.find();
+    res.status(200).json(book);
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json(error);
   }
 };
