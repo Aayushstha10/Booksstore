@@ -61,6 +61,9 @@ mongoose
     console.log("Database:", mongoose.connection.db.databaseName);
     console.log("Host:", mongoose.connection.host);
   })
-  .catch((err) => {z
+  .catch((err) => {
+    z;
     console.error(err);
   });
+
+export default app;
