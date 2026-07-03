@@ -4,7 +4,7 @@ import Login from "./Login";
 import { useForm } from "react-hook-form";
 
 import toast from "react-hot-toast";
-import API from "../../api";
+import API from "../api";
 
 function Signup() {
   const {

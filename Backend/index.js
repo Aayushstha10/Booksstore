@@ -62,7 +62,6 @@ mongoose
     console.log("Host:", mongoose.connection.host);
   })
   .catch((err) => {
-    z;
     console.error(err);
   });
 
