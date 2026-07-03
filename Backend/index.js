@@ -13,7 +13,7 @@ const app = express();
 // Allowed frontend URLs
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://booksstore-mbf2.vercel.app/", // Replace with your frontend URL
+  "https://booksstore-phi.vercel.app/", // Replace with your frontend URL
 ];
 
 app.use(
