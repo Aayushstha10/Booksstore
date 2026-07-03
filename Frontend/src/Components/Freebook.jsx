@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Cards from "./Cards";
-import API from "../../api";
+import API from "../../api"
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,7 +12,6 @@ function Freebook() {
   useEffect(() => {
     const getBook = async () => {
       try {
-        console.log("API URL:", import.meta.env.VITE_API_URL);
         const res = await API.get("/book");
         setBook(res.data.filter((data) => data.category === "free"));
       } catch (error) {

@@ -12,8 +12,8 @@ const app = express();
 
 // Allowed frontend URLs
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://booksstore-h6rh.vercel.app", // Replace with your frontend URL
+  "http://localhost:5173/",
+  "https://booksstore-h6rh.vercel.app", 
 ];
 
 app.use(
@@ -58,8 +58,6 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
-    console.log("Database:", mongoose.connection.db.databaseName);
-    console.log("Host:", mongoose.connection.host);
   })
   .catch((err) => {
     console.error(err);
