@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import API from "../api";
+import axios from "axios";
 
 function Login() {
   const {
@@ -16,7 +16,8 @@ function Login() {
       email: data.email,
       password: data.password,
     };
-    await API.post("/user/login", userInfo)
+    await axios
+      .post("https://booksstore-5.onrender.com/user/login", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {

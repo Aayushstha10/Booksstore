@@ -4,7 +4,7 @@ import Login from "./Login";
 import { useForm } from "react-hook-form";
 
 import toast from "react-hot-toast";
-import API from "../api";
+import axios from "axios";
 
 function Signup() {
   const {
@@ -19,7 +19,7 @@ function Signup() {
       email: data.email,
       password: data.password,
     };
-    await API.post("/user/signup", userInfo)
+    await axios.post("https://booksstore-5.onrender.com/user/signup", userInfo)
       .then((res) => {
         console.log(res.data);
         if (res.data) {

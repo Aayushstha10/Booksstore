@@ -10,34 +10,18 @@ dotenv.config();
 
 const app = express();
 
-// Allowed frontend URLs
-const allowedOrigins = [
-  // "http://localhost:5173",
-  "https://booksstore-phi.vercel.app", // ❌ No trailing slash
-];
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// CORS
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Allow Postman, server-to-server requests
-      if (!origin) return callback(null, true);
-
-      console.log("Origin:", origin);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error(`Origin ${origin} not allowed by CORS`));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    origin: ["http://localhost:5173", "https://booksstore-phi.vercel.app"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+    credentials: true,
+  }),
 );
-
-app.use(express.json());
 
 // Home Route
 app.get("/", (req, res) => {
@@ -59,18 +43,33 @@ app.use((req, res) => {
   });
 });
 
-// MongoDB Connection
+// Global Error Handler (must come after routes, has 4 params)
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.stack);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
+
+// Validate required env vars
+const { MONGODB_URI, PORT = 4001 } = process.env;
+
+if (!MONGODB_URI) {
+  console.error("❌ MONGODB_URI is not defined in environment variables");
+  process.exit(1);
+}
+
+// MongoDB Connection -> then start server
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(MONGODB_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+    });
   })
   .catch((err) => {
-    console.error("MongoDB Error:", err);
+    console.error("❌ MongoDB Connection Error:", err.message);
+    process.exit(1);
   });
-
-const PORT = process.env.PORT || 4001;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on port ${PORT}`);
-});
